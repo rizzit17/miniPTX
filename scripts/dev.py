@@ -38,7 +38,9 @@ def main():
     node = shutil.which("node")
     if not node or not (ROOT / "frontend/node_modules/next/dist/bin/next").exists():
         sys.exit("Install Node.js and run npm install in frontend/ first.")
-    for port in (8000, 3000):
+    frontend_port = int(os.environ.get("PORT", "3000"))
+    frontend_host = os.environ.get("HOST", "0.0.0.0" if (os.environ.get("RENDER") or os.environ.get("PORT")) else "127.0.0.1")
+    for port in (8000, frontend_port):
         with socket.socket() as probe:
             if probe.connect_ex(("127.0.0.1", port)) == 0:
                 sys.exit(f"Port {port} is already in use. Stop its server before launching MiniPTX.")
@@ -50,9 +52,9 @@ def main():
             sys.executable, "-m", "uvicorn", "backend.app.main:app", "--host", "127.0.0.1", "--port", "8000"
         ], cwd=ROOT, **options))
         processes.append(subprocess.Popen([
-            node, "node_modules/next/dist/bin/next", "start" if args.production else "dev", "--hostname", "127.0.0.1", "--port", "3000"
+            node, "node_modules/next/dist/bin/next", "start" if args.production else "dev", "--hostname", frontend_host, "--port", str(frontend_port)
         ], cwd=ROOT / "frontend", **options))
-        print("\nMiniPTX: http://127.0.0.1:3000\nAPI docs: http://127.0.0.1:8000/docs\nCtrl+C stops both servers.\n", flush=True)
+        print(f"\nMiniPTX: http://{frontend_host}:{frontend_port}\nAPI docs: http://127.0.0.1:8000/docs\nCtrl+C stops both servers.\n", flush=True)
         while all(process.poll() is None for process in processes):
             time.sleep(0.5)
         return next((p.returncode for p in processes if p.returncode), 1)

@@ -1,0 +1,34 @@
+# Build artifacts
+build/
+dist/
+out/
+*.cubin
+
+# Python virtual environments and caches
+.venv/
+__pycache__/
+*/__pycache__/
+.pytest_cache/
+*.pyc
+
+# Node / Frontend
+node_modules/
+.next/
+frontend/public/monaco/
+frontend/tsconfig.tsbuildinfo
+
+# Test outputs
+test-results/
+playwright-report/
+
+# Secrets and environment configurations
+.env
+.env.local
+*.env
+
+# IDE and OS files
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db

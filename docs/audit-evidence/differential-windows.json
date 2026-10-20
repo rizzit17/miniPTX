@@ -1,0 +1,15 @@
+{
+  "seeds": [
+    17,
+    42,
+    2026,
+    7500
+  ],
+  "random_valid_programs": 256,
+  "handwritten_valid_programs": 20,
+  "invalid_programs": 24,
+  "compiler_invocations": 600,
+  "corpus_sha256": "823c6a5321f3028344f4c0841586a5b2f3b10399848264ba5d431e49f24e4e6c",
+  "failures": [],
+  "validation": "reference source + IR + software PTX subset; no PTXAS or GPU"
+}

@@ -1,0 +1,4 @@
+let threads = 32;
+let blocks = 8;
+let total = threads * blocks;
+let bytes = total * 4;

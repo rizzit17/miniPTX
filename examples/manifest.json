@@ -1,0 +1,8 @@
+[
+  {"id":"hello","name":"Hello PTX","description":"Your first declaration, from source to assembly.","source":"// A small language. A real compiler.\nlet answer = 42;\n","expected_error":false},
+  {"id":"arithmetic","name":"Arithmetic Expressions","description":"Four operators, signed 32-bit arithmetic.","source":"// Arithmetic, lowered to PTX instructions\nlet width = 32;\nlet height = 16;\nlet area = width * height;\nlet padded = area + 64;\nlet result = (padded - 32) / 2;\n","expected_error":false},
+  {"id":"precedence","name":"Operator Precedence","description":"Multiplication binds more tightly than addition.","source":"let standard = 10 + 20 * 3;\nlet grouped = (10 + 20) * 3;\n","expected_error":false},
+  {"id":"variables","name":"Multiple Variables","description":"Immutable variables and a sequential symbol table.","source":"let threads = 32;\nlet blocks = 8;\nlet total = threads * blocks;\nlet bytes = total * 4;\n","expected_error":false},
+  {"id":"folding","name":"Constant Folding","description":"Watch literal expressions collapse in the IR.","source":"// Try disabling constant folding to compare the PTX.\nlet tile = 8 * 4;\nlet stride = (16 + 16) * 2;\nlet offset = 100 / (2 + 3);\nlet result = tile + stride + offset;\n","expected_error":false},
+  {"id":"error","name":"Compiler Error Demonstration","description":"An undefined identifier, with a precise source location.","source":"let width = 32;\nlet result = width * height;\n","expected_error":true}
+]

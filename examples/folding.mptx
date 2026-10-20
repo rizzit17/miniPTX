@@ -1,0 +1,5 @@
+// Try disabling constant folding to compare the PTX.
+let tile = 8 * 4;
+let stride = (16 + 16) * 2;
+let offset = 100 / (2 + 3);
+let result = tile + stride + offset;

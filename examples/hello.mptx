@@ -1,0 +1,2 @@
+// A small language. A real compiler.
+let answer = 42;

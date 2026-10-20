@@ -1,0 +1,6 @@
+// Arithmetic, lowered to PTX instructions
+let width = 32;
+let height = 16;
+let area = width * height;
+let padded = area + 64;
+let result = (padded - 32) / 2;

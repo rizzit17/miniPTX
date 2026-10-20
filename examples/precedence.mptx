@@ -1,0 +1,2 @@
+let standard = 10 + 20 * 3;
+let grouped = (10 + 20) * 3;

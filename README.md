@@ -2,7 +2,7 @@
 
 MiniPTX is a compiler frontend written in C++ that translates a restricted arithmetic language into NVIDIA PTX assembly. It includes an interactive web interface for inspecting the compilation process, from tokenization and parsing to intermediate representation, constant folding, and code generation. Every intermediate result displayed in the interface is produced directly by the C++ compiler executable.
 
-![MiniPTX playground interface](docs/screenshots/playground.png)
+![MiniPTX Playground Overview](docs/screenshots/playground.png)
 
 ## Overview
 
@@ -43,6 +43,30 @@ flowchart LR
 4. **IR Lowering**: Lowers the AST into three-address instructions using explicit temporaries (`%t0`, `%t1`, ...) and declaration targets (`$x`).
 5. **Optimization**: Traverses literal expression trees bottom-up and folds constant operations into immediate values.
 6. **PTX Generation**: Allocates virtual 32-bit registers (`%r0`, `%r1`, ...), emits parameter loading from kernel arguments, generates arithmetic instructions (`add.s32`, `sub.s32`, `mul.lo.s32`, `div.s32`), and stores results to global memory.
+
+### Pipeline Inspection Views
+
+The interactive playground exposes the state of each compiler pass in real time:
+
+#### 1. Abstract Syntax Tree Inspector
+The recursive-descent parser constructs an owned syntax tree. The AST viewer displays declarations, operator nodes, and literal values with collapsible branches and source span badges:
+
+![MiniPTX Abstract Syntax Tree Viewer](docs/screenshots/ast-viewer.png)
+
+#### 2. Intermediate Representation & Three-Address Code
+Three-address code instructions (`mov`, `add`, `sub`, `mul`, `div`) explicitly decouple evaluation order and temporary register allocation from source declarations:
+
+![MiniPTX Intermediate Representation](docs/screenshots/ir-viewer.png)
+
+#### 3. Literal Constant Folding
+The optimizer traverses expression trees bottom-up to fold literal-only operations. The optimization log details each transformation and instruction reduction:
+
+![MiniPTX Constant Folding Records](docs/screenshots/optimization.png)
+
+#### 4. Compiler Diagnostics & Source Navigation
+When lexical, syntactic, or semantic violations occur (e.g. undefined identifiers, type/overflow violations, or division by zero), compilation halts cleanly and jumps directly to the source error location:
+
+![MiniPTX Compiler Diagnostics](docs/screenshots/diagnostics.png)
 
 ## Example
 

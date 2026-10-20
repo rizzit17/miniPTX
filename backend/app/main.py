@@ -40,12 +40,33 @@ class BodyLimitMiddleware:
         await self.app(scope, replay, send)
 
 
+from fastapi.exceptions import RequestValidationError
+
+
 app = FastAPI(title="MiniPTX", version="1.0.0")
 app.add_middleware(BodyLimitMiddleware)
 app.add_middleware(CORSMiddleware, allow_origins=[
     "http://localhost:3000", "http://127.0.0.1:3000"
 ], allow_methods=["GET", "POST"], allow_headers=["Content-Type"])
 compile_slots = asyncio.Semaphore(4)
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc: RequestValidationError):
+    for error in exc.errors():
+        if error.get("type") == "string_unicode":
+            return JSONResponse(
+                status_code=422,
+                content={"detail": "Source contains invalid Unicode surrogate code points"},
+            )
+    try:
+        from fastapi.encoders import jsonable_encoder
+        return JSONResponse(status_code=422, content={"detail": jsonable_encoder(exc.errors())})
+    except Exception:
+        return JSONResponse(
+            status_code=422,
+            content={"detail": "Source contains invalid Unicode surrogate code points"},
+        )
 
 
 @app.get("/api/health")

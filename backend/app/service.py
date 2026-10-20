@@ -85,6 +85,8 @@ def compile_source(request: CompileRequest) -> CompileResponse:
     start = time.perf_counter()
     skipped = AssemblerValidation(status="skipped", message="No PTX generated.")
     try:
+        if not COMPILER_PATH.is_file():
+            raise FileNotFoundError(f"Compiler binary not found at {COMPILER_PATH}")
         args = [str(COMPILER_PATH)]
         if not request.optimize:
             args.append("--no-optimize")
